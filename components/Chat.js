@@ -1,77 +1,49 @@
-import { useState } from "react"
-import { SafeAreaView, ScrollView, StyleSheet, View, Text, Image, TouchableOpacity } from "react-native";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faArrowLeft, faEllipsisVertical, faPhone, faVideo } from '@fortawesome/free-solid-svg-icons'
+import { useEffect, useState } from "react";
+import { SafeAreaView, StyleSheet, Image } from "react-native";
+import manifest from "../manifest";
+import ChatMessages from "./Chat_Messages";
+import ChatProfile from "./Chat_Profile";
+import ChatMessageControl from "./Chat_Message_Control";
 
-export default function Chat({ }) {
-    return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.profile}>
-                <TouchableOpacity style={styles.back}>
-                    <FontAwesomeIcon size={20} icon={faArrowLeft} style={styles.backIcon} />
-                    <Image style={styles.userprofile} source={require('../assets/profile.png')} />
-                </TouchableOpacity>
-                <Text style={styles.user}>Nhlamulo</Text>
-                <View style={styles.tools}>
-                    <FontAwesomeIcon size={20} icon={faVideo} />
-                    <FontAwesomeIcon size={20} icon={faPhone} />
-                    <FontAwesomeIcon size={20} icon={faEllipsisVertical} />
-                </View>
-            </View>
-            <ScrollView style={styles.messages}>
-                <Image source={require('../assets/wallp.jpg')} />
-                <Text>Content</Text>
-            </ScrollView>
-            <View style={styles.controls}>
-                <Text>Controls</Text>
-            </View>
-        </SafeAreaView>
-    );
+export default function Chat({}) {
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    if(messages[messages.length-1]?.msg?.message === "Hi"){
+      setMessages([...messages, {
+        id: Math.floor(Math.random() * 10000),
+        msg: {
+          user: "bot",
+          message: "Hey there jonny, Howwa you?"
+        }
+      }])
+    }
+  }, [messages])
+
+  const setMyMessage = (msg) => {
+    setMessages([...messages, {
+      id: Math.floor(Math.random() * 10000),
+      msg
+    }]);
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <Image source={manifest.chatbg} style={styles.bgImage} />
+      <ChatProfile />
+      <ChatMessages messageList={messages}/>
+      <ChatMessageControl sendMessage={setMyMessage} />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    profile: {
-        backgroundColor: '#075E54',
-        flexDirection: 'row',
-        alignItems: 'center',
-        padding: 7
-    },
-    userprofile: {
-        width: 35,
-        height: 35,
-        borderRadius: 50,
-        color: '#fff'
-    },
-    messages: {
-        backgroundColor: 'yellow',
-    },
-    controls: {
-        backgroundColor: 'brown',
-    },
-    back: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        paddingLeft: 5,
-        paddingRight: 5,
-        paddingTop: 2,
-        paddingBottom: 2,
-        borderRadius: 40
-    },
-    backIcon: {
-        fontSize: 25,
-        color: '#fff'
-    },
-    user: {
-        fontSize: 18,
-        marginLeft: 2,
-        color: '#fff'
-    },
-    tools: {
-        position: 'absolute',
-        flexDirection: 'row',
-        right: 12
-    }
-})
+  container: {
+    flex: 1,
+  },
+  bgImage: {
+    position: "absolute",
+    width: "100%",
+    zIndex: 0,
+  },
+});
