@@ -3,8 +3,9 @@ import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useState } from "react";
 import { StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
-export default function ChatMessageControl({ sendMessage }) {
+export default function ChatMessageControl({ rootId, sendMessage }) {
   const [message, setMessage] = useState({});
 
   return (
@@ -18,8 +19,9 @@ export default function ChatMessageControl({ sendMessage }) {
           value={message}
           onChangeText={(msg) => {
             setMessage({
+              id: rootId,
               user: "me",
-              message: msg
+              message: msg,
             });
           }}
         ></TextInput>
@@ -30,9 +32,12 @@ export default function ChatMessageControl({ sendMessage }) {
           <FontAwesomeIcon icon={faPaperclip} size={24} />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => {
-        sendMessage(message, setMessage)
-      }} style={styles.btnContainer}>
+      <TouchableOpacity
+        onPress={() => {
+          sendMessage(message, setMessage);
+        }}
+        style={styles.btnContainer}
+      >
         <FontAwesomeIcon icon={faPaperPlane} size={20} style={styles.btnSend} />
       </TouchableOpacity>
     </View>
@@ -43,10 +48,8 @@ const styles = StyleSheet.create({
   controls: {
     flexDirection: "row",
     maxHeight: 150,
-    padding: 3,
-    bottom: 22,
+    padding: 17,
     alignItems: "flex-end",
-    padding: 5,
   },
   msgInput: {
     width: "88%",

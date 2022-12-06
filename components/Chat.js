@@ -5,47 +5,43 @@ import ChatMessages from "./Chat_Messages";
 import ChatProfile from "./Chat_Profile";
 import ChatMessageControl from "./Chat_Message_Control";
 
-export default function Chat({ }) {
-    const [messages, setMessages] = useState([]);
+export default function Chat({ socket }) {
+  const [messages, setMessages] = useState([]);
+  const [userId, setId] = useState();
 
-    useEffect(() => {
-        if (messages[messages.length - 1]?.msg?.message === "Hi") {
-            setMessages([...messages, {
-                id: Math.floor(Math.random() * 10000),
-                msg: {
-                    user: "bot",
-                    message: "Hey there jonny, Howwa you?"
-                }
-            }])
-        }
-    }, [messages])
+  useEffect(() => {
+    socket.on("/connected", (id) => {
+      setId(id);
+    });
 
-    const setMyMessage = (msg, resetMessage) => {
-        setMessages([...messages, {
-            id: Math.floor(Math.random() * 10000),
-            msg
-        }]);
+    socket.on("/sentMessage", (newMsg) => {
+      setMessages([...messages, newMsg]);
+    });
+  }, [socket, messages]);
 
-        resetMessage('');
-    };
+  const setMyMessage = (msg, resetMsgBox) => {
+    socket.emit("/newMessage", msg);
+    setMessages([...messages, msg]);
+    resetMsgBox("");
+  };
 
-    return (
-        <SafeAreaView style={styles.container}>
-            <Image source={manifest.chatbg} style={styles.bgImage} />
-            <ChatProfile />
-            <ChatMessages messageList={messages} />
-            <ChatMessageControl sendMessage={setMyMessage} />
-        </SafeAreaView>
-    );
+  return (
+    <SafeAreaView style={styles.container}>
+      <Image source={manifest.chatbg} style={styles.bgImage} />
+      <ChatProfile />
+      <ChatMessages rootId={userId} messageList={messages} />
+      <ChatMessageControl rootId={userId} sendMessage={setMyMessage} />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    bgImage: {
-        position: "absolute",
-        width: "100%",
-        zIndex: 0,
-    },
+  container: {
+    flex: 1
+  },
+  bgImage: {
+    position: "absolute",
+    width: "100%",
+    zIndex: 0,
+  },
 });

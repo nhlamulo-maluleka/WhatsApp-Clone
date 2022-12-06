@@ -2,14 +2,17 @@ import { StyleSheet, ScrollView } from "react-native";
 import ReceivedMessage from "./ReceivedMessage";
 import SentMessage from "./SentMessage";
 
-export default function ChatMessages({ messageList }) {
+export default function ChatMessages({ rootId, messageList }) {
   return (
     <ScrollView style={styles.messages}>
-        {
-            messageList.map(({id, msg: {user, message}}) => {
-                return user === "me" ? <SentMessage id={id} msg={message} key={id}/> : <ReceivedMessage id={id} msg={message} key={id}/>;
-            })
-        }
+      {messageList.map((object, index) => {
+        const { id, user, message } = object;
+        return id === rootId ? (
+          <SentMessage id={id} msg={message} key={index} />
+        ) : (
+          <ReceivedMessage id={id} msg={message} key={index} />
+        );
+      })}
     </ScrollView>
   );
 }
