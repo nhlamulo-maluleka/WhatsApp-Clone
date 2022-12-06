@@ -15,6 +15,7 @@ export default function ChatMessageControl({ sendMessage }) {
           multiline={true}
           numberOfLines={1}
           style={styles.messageBox}
+          value={message}
           onChangeText={(msg) => {
             setMessage({
               user: "me",
@@ -30,7 +31,7 @@ export default function ChatMessageControl({ sendMessage }) {
         </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => {
-        sendMessage(message)
+        sendMessage(message, setMessage)
       }} style={styles.btnContainer}>
         <FontAwesomeIcon icon={faPaperPlane} size={20} style={styles.btnSend} />
       </TouchableOpacity>
