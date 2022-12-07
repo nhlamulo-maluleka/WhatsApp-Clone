@@ -18,10 +18,11 @@ export default function App() {
         <Stack.Screen
           name={"Home"}
           component={Home}
-          options={{ title: "WhatsApp" }} />
+          options={{ title: "WhatsApp", headerShown: false }} />
         <Stack.Screen
           name={"Chat"}
-          component={Chat} />
+          component={Chat}
+          options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
