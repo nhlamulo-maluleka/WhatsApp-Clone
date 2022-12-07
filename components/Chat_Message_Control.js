@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
   controls: {
     flexDirection: "row",
     maxHeight: 150,
-    padding: 17,
+    padding: 10,
     alignItems: "flex-end",
   },
   msgInput: {

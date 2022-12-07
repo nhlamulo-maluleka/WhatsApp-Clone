@@ -1,19 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Chat from './components/Chat';
-import io from "./socket"
+import Home from './components/Home';
+import { LogBox } from 'react-native';
+
+// LogBox.ignoreWarnings([
+//   'Non-serializable values were found in the navigation state',
+// ]);
+
+/* <Chat socket={io} /> */
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <SafeAreaView style={styles.container}>
-      <Chat socket={io}/>
-      <StatusBar style="dark" hidden={false} animated={true}/>
-    </SafeAreaView>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name={"Home"}
+          component={Home}
+          options={{ title: "WhatsApp" }} />
+        <Stack.Screen
+          name={"Chat"}
+          component={Chat} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-});

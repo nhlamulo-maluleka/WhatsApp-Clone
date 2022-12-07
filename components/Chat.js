@@ -5,9 +5,10 @@ import ChatMessages from "./Chat_Messages";
 import ChatProfile from "./Chat_Profile";
 import ChatMessageControl from "./Chat_Message_Control";
 
-export default function Chat({ socket }) {
+export default function Chat({ navigation, route }) {
   const [messages, setMessages] = useState([]);
   const [userId, setId] = useState();
+  const [socket, setSocket] = useState(route.params.socket);
 
   useEffect(() => {
     socket.on("/connected", (id) => {
@@ -28,7 +29,7 @@ export default function Chat({ socket }) {
   return (
     <SafeAreaView style={styles.container}>
       <Image source={manifest.chatbg} style={styles.bgImage} />
-      <ChatProfile />
+      <ChatProfile nav={navigation}/>
       <ChatMessages rootId={userId} messageList={messages} />
       <ChatMessageControl rootId={userId} sendMessage={setMyMessage} />
     </SafeAreaView>
