@@ -5,14 +5,14 @@ import SentMessage from "./SentMessage";
 export default function ChatMessages({ rootId, messageList }) {
   return (
     <ScrollView style={styles.messages}>
-      {messageList.map((object, index) => {
+      {/* {messageList.map((object, index) => {
         const { id, user, message } = object;
         return id === rootId ? (
           <SentMessage id={id} msg={message} key={index} />
         ) : (
           <ReceivedMessage id={id} msg={message} key={index} />
         );
-      })}
+      })} */}
     </ScrollView>
   );
 }

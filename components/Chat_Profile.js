@@ -8,10 +8,15 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import manifest from "../manifest";
 
-export default function ChatProfile({}) {
+export default function ChatProfile({ navigation }) {
   return (
     <View style={styles.profile}>
-      <TouchableOpacity style={styles.back}>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.goBack();
+        }}
+        style={styles.back}
+      >
         <FontAwesomeIcon size={20} icon={faArrowLeft} style={styles.backIcon} />
         <Image style={styles.userprofile} source={manifest.userProfile} />
       </TouchableOpacity>
@@ -26,7 +31,11 @@ export default function ChatProfile({}) {
           <FontAwesomeIcon size={20} style={styles.icons} icon={faPhone} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <FontAwesomeIcon size={20} style={styles.icons} icon={faEllipsisVertical} />
+          <FontAwesomeIcon
+            size={20}
+            style={styles.icons}
+            icon={faEllipsisVertical}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -70,10 +79,10 @@ const styles = StyleSheet.create({
     right: 12,
   },
   icons: {
-    color: '#fff'
+    color: "#fff",
   },
   iconContainer: {
     marginLeft: 25,
-    marginRight: 20
-  }
+    marginRight: 20,
+  },
 });

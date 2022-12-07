@@ -1,27 +1,30 @@
 import { useEffect, useState } from "react";
-import { SafeAreaView, StyleSheet, Image } from "react-native";
+import { SafeAreaView, StyleSheet, Image, StatusBar } from "react-native";
 import manifest from "../manifest";
 import ChatMessages from "./Chat_Messages";
 import ChatProfile from "./Chat_Profile";
 import ChatMessageControl from "./Chat_Message_Control";
 
-export default function Chat({ navigation, route }) {
+export default function ChatMessage({ navigation, route }) {
   const [messages, setMessages] = useState([]);
   const [userId, setId] = useState();
-  const [socket, setSocket] = useState(route.params.socket);
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    socket.on("/connected", (id) => {
+    // const socketObj = JSON.parse(route.params.socket);
+    // setSocket(socketObj);
+
+    route.params.socket?.on("/connected", (id) => {
       setId(id);
     });
 
-    socket.on("/sentMessage", (newMsg) => {
+    route.params.socket?.on("/sentMessage", (newMsg) => {
       setMessages([...messages, newMsg]);
     });
-  }, [socket, messages]);
+  }, [route, messages]);
 
   const setMyMessage = (msg, resetMsgBox) => {
-    socket.emit("/newMessage", msg);
+    route.params.socket?.emit("/newMessage", msg);
     setMessages([...messages, msg]);
     resetMsgBox("");
   };
@@ -29,16 +32,17 @@ export default function Chat({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <Image source={manifest.chatbg} style={styles.bgImage} />
-      <ChatProfile nav={navigation}/>
+      <ChatProfile navigation={navigation} />
       <ChatMessages rootId={userId} messageList={messages} />
       <ChatMessageControl rootId={userId} sendMessage={setMyMessage} />
+      <StatusBar/>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   bgImage: {
     position: "absolute",
