@@ -18,6 +18,10 @@ io.on("connection", (socket) => {
   socket.on("/newMessage", (msg) => {
     socket.broadcast.emit("/sentMessage", msg);
   });
+
+  socket.on("/Hello", g => {
+    console.log(g)
+  })
 });
 
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));

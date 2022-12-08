@@ -1,21 +1,70 @@
-import { useState } from "react";
 import { SafeAreaView, StyleSheet, StatusBar, Text, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import Calls from "./Calls";
 import Chats from "./Chats";
 import Status from "./Status";
-
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+  faCamera,
+  faEllipsisVertical,
+  faSearch,
+} from "@fortawesome/free-solid-svg-icons";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import socket from "../socket";
 const Tab = createMaterialTopTabNavigator();
 
 export default function Home({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-        <Tab.Navigator>
-            <Tab.Screen name="CHATS" component={Chats}/>
-            <Tab.Screen name="STATUS" component={Status}/>
-            <Tab.Screen name="CALLS" component={Calls}/>
-        </Tab.Navigator>
-      <StatusBar />
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>WhatsApp</Text>
+        <View style={styles.tools}>
+          <TouchableOpacity>
+            <FontAwesomeIcon
+              style={styles.toolIcons}
+              size={21}
+              icon={faCamera}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.midToolIcon}>
+            <FontAwesomeIcon
+              size={21}
+              style={styles.toolIcons}
+              icon={faSearch}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <FontAwesomeIcon
+              style={styles.toolIcons}
+              size={21}
+              icon={faEllipsisVertical}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <Tab.Navigator
+        screenOptions={{
+          tabBarStyle: {
+            backgroundColor: "#1f2c34",
+          },
+          tabBarLabelStyle: {
+            color: "#06a683",
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: "#06a683",
+          },
+        }}
+      >
+        <Tab.Screen
+          style={styles.tab}
+          name="CHATS"
+          component={Chats}
+          initialParams={{ socket: socket, navigation: navigation }}
+        />
+        <Tab.Screen name="STATUS" component={Status} />
+        <Tab.Screen name="CALLS" component={Calls} />
+      </Tab.Navigator>
+      <StatusBar style={{ backgroundColor: "#1f2c34" }} />
     </SafeAreaView>
   );
 }
@@ -23,5 +72,30 @@ export default function Home({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    flexDirection: "row",
+    padding: 18,
+    alignItems: "center",
+    backgroundColor: "#1f2c34",
+  },
+  tools: {
+    position: "absolute",
+    flexDirection: "row",
+    right: 15,
+  },
+  toolIcons: {
+    color: "#8596a1",
+  },
+  midToolIcon: {
+    marginLeft: 27,
+    marginRight: 22,
+  },
+  headerTitle: {
+    fontSize: 19,
+    color: "#8596a1",
+  },
+  tab: {
+    color: "#fff",
   },
 });
