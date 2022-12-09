@@ -5,7 +5,6 @@ import manifest from "../manifest";
 
 export default function ChatUser({name, phone}) {
   const [pressed, setPressed] = useState(false);
-  console.log(name, phone);
 
   return (
     <TouchableOpacity
@@ -45,8 +44,8 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   profile: {
-    width: 60,
-    height: 60,
+    width: 45,
+    height: 45,
     borderRadius: 20,
   },
   textView: {
@@ -54,8 +53,8 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   userName: {
-    fontSize: 20,
-    color: "#989ea2",
+    fontSize: 17,
+    color: "#FFF",
   },
   msgPreview: {
     fontSize: 14,
@@ -68,5 +67,6 @@ const styles = StyleSheet.create({
     top: 12,
     right: 14,
     color: "#989ea2",
+    fontSize: 12
   },
 });

@@ -1,54 +1,44 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
-import ChatUser from "./ChatUser";
-import * as Contacts from "expo-contacts";
+import {
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  Text,
+  View,
+} from "react-native";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMessage } from "@fortawesome/free-regular-svg-icons";
 
 export default function Chats({ route }) {
-  const [contacts, setContacts] = useState([]);
-
-  useEffect(() => {
-    (async () => {
-      let contactList = []
-      const { status } = await Contacts.requestPermissionsAsync();
-      if (status === "granted") {
-        const { data } = await Contacts.getContactsAsync({
-          fields: [Contacts.Fields.FirstName, Contacts.Fields.PhoneNumbers],
-        });
-
-        if (data.length > 0) {
-          data.forEach((object) => {
-            if (object) {
-              const contact = { name: object.firstName };
-
-              object.phoneNumbers?.forEach((phone) => {
-                if (contact.name) {
-                  if (!contact.phone) {
-                    contact.phone = phone.number;
-                    contactList = [...contactList, contact];
-                  }
-                }
-              });
-            }
-          });
-        }
-        setContacts(contactList);
-      }
-    })();
-  }, []);
+  const [contacts, setContacts] = useState(null);
+  useEffect(() => {}, []);
 
   return (
-    <>
-      <ScrollView style={styles.container}>
-        {contacts.map((object, index) => {
-          return <ChatUser name={object.name} phone={object.phone} key={index}/>;
-        })}
-      </ScrollView>
-      <TouchableOpacity style={styles.message}>
+    <View style={styles.container}>
+      {contacts ? (
+        <ScrollView></ScrollView>
+      ) : (
+        <Text
+          style={{
+            textAlign: "center",
+            margin: 50,
+            color: "#fff",
+            fontSize: 17,
+            fontWeight: "300",
+            color: "#25D366"
+          }}
+        >
+          Start a Chat
+        </Text>
+      )}
+      <TouchableOpacity 
+        onPress={() => {
+          route.params.navigation.navigate("StartChat", {})
+        }}
+        style={styles.message}>
         <FontAwesomeIcon icon={faMessage} size={20} />
       </TouchableOpacity>
-    </>
+    </View>
   );
 }
 
