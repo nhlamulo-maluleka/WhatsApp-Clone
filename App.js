@@ -1,6 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import ChatMessage from "./components/ChatMessage";
+import ConfirmNumber from "./components/ConfirmNumber";
 import Home from "./components/Home";
 import StartChat from "./components/StartChat";
 
@@ -10,6 +11,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name={"SetNumber"}
+          component={ConfirmNumber}
+          options={{ title: "Phone Number", headerShown: false }}
+        />
         <Stack.Screen
           name={"Home"}
           component={Home}
