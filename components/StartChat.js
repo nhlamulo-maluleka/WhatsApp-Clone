@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, Text } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+  ActivityIndicator,
+} from "react-native";
 import * as Contacts from "expo-contacts";
 import ChatUser from "./ChatUser";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -10,7 +16,7 @@ import {
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
 
-export default function StartChat({}) {
+export default function StartChat({ navigation, route }) {
   const [contacts, setContacts] = useState([]);
 
   useEffect(() => {
@@ -46,16 +52,23 @@ export default function StartChat({}) {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.goBack();
+          }}
+        >
           <FontAwesomeIcon
-            style={styles.backArrow} 
-            icon={faArrowLeft} 
-            size={19} />
+            style={styles.backArrow}
+            icon={faArrowLeft}
+            size={19}
+          />
         </TouchableOpacity>
 
         <View style={styles.headerText}>
           <Text style={styles.headerTextStyle1}>Select Contact</Text>
-          <Text style={styles.headerTextStyle2}>{contacts ? contacts.length : 0} contacts</Text>
+          <Text style={styles.headerTextStyle2}>
+            {contacts ? contacts.length : 0} contacts
+          </Text>
         </View>
 
         <View style={styles.headerTools}>
@@ -75,14 +88,26 @@ export default function StartChat({}) {
           </TouchableOpacity>
         </View>
       </View>
-
-      <ScrollView>
-        {contacts.map((object, index) => {
-          return (
-            <ChatUser name={object.name} phone={object.phone} key={index} />
-          );
-        })}
-      </ScrollView>
+      <View style={styles.contentView}>
+        {contacts.length > 0 ? (
+          <ScrollView style={styles.contactsView}>
+            {contacts.map((object, index) => {
+              return (
+                <ChatUser
+                  name={object.name}
+                  phone={object.phone}
+                  time={false}
+                  navigation={navigation}
+                  socket={route.params.socket}
+                  key={index}
+                />
+              );
+            })}
+          </ScrollView>
+        ) : (
+          <ActivityIndicator size={"large"} color={"#FFF"} />
+        )}
+      </View>
     </View>
   );
 }
@@ -98,7 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     padding: 10,
     alignItems: "center",
-    backgroundColor: "#1f2c34"
+    backgroundColor: "#1f2c34",
   },
   headerText: {
     flexDirection: "column",
@@ -111,20 +136,28 @@ const styles = StyleSheet.create({
   headerToolStyle: {
     color: "#FFF",
     marginLeft: 15,
-    marginRight: 10
+    marginRight: 10,
   },
-  headerTextStyle1:{
+  headerTextStyle1: {
     fontSize: 17,
-    color: "#FFF"
+    color: "#FFF",
   },
-  headerTextStyle2:{
+  headerTextStyle2: {
     fontSize: 11,
-    color: "#FFF"
+    color: "#FFF",
   },
   backArrow: {
     color: "#FFF",
     padding: 12,
     borderRadius: 20,
-    marginRight: 15
-  }
+    marginRight: 15,
+  },
+  contactsView: {
+    width: "100%",
+  },
+  contentView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });

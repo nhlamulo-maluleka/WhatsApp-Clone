@@ -4,13 +4,10 @@ import Calls from "./Calls";
 import Chats from "./Chats";
 import Status from "./Status";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faCamera,
-  faEllipsisVertical,
-  faSearch,
-} from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faEllipsisVertical, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import socket from "../socket";
+
 const Tab = createMaterialTopTabNavigator();
 
 export default function Home({ navigation }) {
@@ -59,7 +56,7 @@ export default function Home({ navigation }) {
           style={styles.tab}
           name="CHATS"
           component={Chats}
-          initialParams={{ socket: socket, navigation: navigation }}
+          initialParams={{ socket: socket }}
         />
         <Tab.Screen name="STATUS" component={Status} />
         <Tab.Screen name="CALLS" component={Calls} />

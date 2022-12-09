@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import manifest from "../manifest";
 
-export default function ChatUser({name, phone}) {
+export default function ChatUser({ name, phone, time, navigation, socket }) {
   const [pressed, setPressed] = useState(false);
 
   return (
@@ -21,7 +21,13 @@ export default function ChatUser({name, phone}) {
       onLongPress={() => {
         setPressed(true);
       }}
-      onPress={() => {}}
+      onPress={() => {
+        navigation.navigate("ChatMessage", {
+          name: name,
+          number: phone,
+          socket: socket,
+        });
+      }}
       onPressOut={() => {
         setPressed(false);
       }}
@@ -31,9 +37,9 @@ export default function ChatUser({name, phone}) {
       </TouchableOpacity>
       <View style={styles.textView}>
         <Text style={styles.userName}>{name}</Text>
-        <Text style={styles.msgPreview}>Recent message preview</Text>
+        <Text style={styles.msgPreview}>Recent activity preview</Text>
       </View>
-      <Text style={styles.time}>11:20</Text>
+      {time ? <Text style={styles.time}>11:20</Text> : null}
     </TouchableOpacity>
   );
 }
@@ -51,6 +57,8 @@ const styles = StyleSheet.create({
   textView: {
     flexDirection: "column",
     marginLeft: 10,
+    alignItems: "flex-start",
+    justifyContent: "center",
   },
   userName: {
     fontSize: 17,
@@ -67,6 +75,6 @@ const styles = StyleSheet.create({
     top: 12,
     right: 14,
     color: "#989ea2",
-    fontSize: 12
+    fontSize: 12,
   },
 });

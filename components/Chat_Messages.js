@@ -1,8 +1,9 @@
+import { useEffect } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import ReceivedMessage from "./ReceivedMessage";
 import SentMessage from "./SentMessage";
 
-export default function ChatMessages({ rootId, messageList }) {
+export default function ChatMessages({ navigation, route }) {  
   return (
     <ScrollView style={styles.messages}>
       {/* {messageList.map((object, index) => {

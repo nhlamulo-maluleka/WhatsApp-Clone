@@ -8,20 +8,22 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import manifest from "../manifest";
 
-export default function ChatProfile({ navigation }) {
+export default function ChatProfile({ navigation, route }) {
   return (
     <View style={styles.profile}>
       <TouchableOpacity
         onPress={() => {
-          navigation.goBack();
+          navigation.navigate("Home");
         }}
         style={styles.back}
       >
         <FontAwesomeIcon size={20} icon={faArrowLeft} style={styles.backIcon} />
         <Image style={styles.userprofile} source={manifest.userProfile} />
       </TouchableOpacity>
-
-      <Text style={styles.user}>Nhlamulo</Text>
+      <View style={styles.userNameContainer}>
+        <Text style={styles.user}>{route.params.name}</Text>
+        <Text style={styles.online}>online</Text>
+      </View>
 
       <View style={styles.tools}>
         <TouchableOpacity>
@@ -44,10 +46,11 @@ export default function ChatProfile({ navigation }) {
 
 const styles = StyleSheet.create({
   profile: {
-    backgroundColor: "#075E54",
+    backgroundColor: "#1f2c34",
     flexDirection: "row",
     alignItems: "center",
-    padding: 7,
+    justifyContent: "flex-start",
+    padding: 9,
   },
   userprofile: {
     width: 35,
@@ -84,5 +87,14 @@ const styles = StyleSheet.create({
   iconContainer: {
     marginLeft: 25,
     marginRight: 20,
+  },
+  online: {
+    fontSize: 11,
+    color: "#FFF",
+  },
+  userNameContainer: {
+    flexDirection: "column",
+    // alignItems: "flex-start",
+    // justifyContent: "center"
   },
 });

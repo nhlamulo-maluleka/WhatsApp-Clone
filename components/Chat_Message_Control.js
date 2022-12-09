@@ -3,7 +3,7 @@ import { faPaperclip } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useState } from "react";
 import { StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
-import { widthPercentageToDP as wp } from "react-native-responsive-screen";
+// import { widthPercentageToDP as wp } from "react-native-responsive-screen";
 
 export default function ChatMessageControl({ rootId, sendMessage }) {
   const [message, setMessage] = useState({});
@@ -13,6 +13,7 @@ export default function ChatMessageControl({ rootId, sendMessage }) {
       <View style={styles.msgInput}>
         <TextInput
           placeholder="Message"
+          placeholderTextColor={"#8596a1"}
           multiline={true}
           numberOfLines={1}
           style={styles.messageBox}
@@ -26,10 +27,10 @@ export default function ChatMessageControl({ rootId, sendMessage }) {
           }}
         ></TextInput>
         <TouchableOpacity style={styles.emojiBtnContainer}>
-          <FontAwesomeIcon icon={faSmile} size={24} />
+          <FontAwesomeIcon style={styles.icons} icon={faSmile} size={24} />
         </TouchableOpacity>
         <TouchableOpacity style={styles.attachBtnContainer}>
-          <FontAwesomeIcon icon={faPaperclip} size={24} />
+          <FontAwesomeIcon style={styles.icons} icon={faPaperclip} size={23} />
         </TouchableOpacity>
       </View>
       <TouchableOpacity
@@ -61,18 +62,20 @@ const styles = StyleSheet.create({
     width: "100%",
     fontSize: 19,
     borderRadius: 20,
-    borderWidth: 2,
-    backgroundColor: "#fff",
+    backgroundColor: "#1f2c34",
     paddingLeft: 40,
     paddingRight: 41,
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 8,
+    paddingBottom: 8,
+    color: "#FFF",
   },
   btnContainer: {
-    backgroundColor: "#075E54",
+    backgroundColor: "#25D366",
     borderRadius: 25,
     padding: 12,
     marginLeft: 3,
+    alignItems: "center",
+    justifyContent: "center",
   },
   btnSend: {
     color: "#fff",
@@ -86,5 +89,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 10,
     bottom: 10,
+  },
+  icons: {
+    color: "#8596a1",
   },
 });

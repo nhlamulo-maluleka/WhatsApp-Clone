@@ -11,9 +11,6 @@ export default function ChatMessage({ navigation, route }) {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    // const socketObj = JSON.parse(route.params.socket);
-    // setSocket(socketObj);
-
     route.params.socket?.on("/connected", (id) => {
       setId(id);
     });
@@ -32,7 +29,7 @@ export default function ChatMessage({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <Image source={manifest.chatbg} style={styles.bgImage} />
-      <ChatProfile navigation={navigation} />
+      <ChatProfile navigation={navigation} route={route}/>
       <ChatMessages rootId={userId} messageList={messages} />
       <ChatMessageControl rootId={userId} sendMessage={setMyMessage} />
       <StatusBar/>
