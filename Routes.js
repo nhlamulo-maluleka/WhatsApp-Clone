@@ -1,29 +1,49 @@
-const { Router } = require('express')
+const { Router } = require("express");
 const route = Router();
-const { userSchema } = require('./Schema')
-const multer = require('multer')();
+const { userSchema } = require("./Schema");
+const multer = require("multer")();
 
-route.post('/authPhone', async (req, res) => {
-    const { body: { phone } } = req;
-    const exist = await userSchema.findOne({ number: phone })
-    res.send({ exists: exist ? true : false });
-})
+// (async () => {
+//   const d = await userSchema.deleteOne({number: '0733859365'})
+//   console.log(d)
+// })()
 
-route.post("/createUser", multer.single("profile"), (req, res) => {
-    const { body, file } = req;
+route.post("/authPhone", async (req, res) => {
+  const {
+    body: { phone },
+  } = req;
+  const exist = await userSchema.findOne({ number: phone });
+  res.send({ exists: exist ? true : false });
+});
 
-    console.log(body, file)
-    // var user = new userSchema({
-    //     number: phone,
-    //     name: null,
-    //     about: null,
-    //     profile: null
-    // })
+route.post("/createUser", multer.single("profile"), async (req, res) => {
+  const {
+    body: { number, name, profile },
+    file,
+  } = req;
 
+  var user = new userSchema({
+    number: number,
+    name: name,
+    about: null,
+    profile: profile,
+    verified: true,
+  });
 
-    // const exists = await user.save().then(e => {
-    //     console.log(e)
-    // });
-})
+  await user.save((err, record) => {
+    if (err)
+      return res.send({
+        id: null,
+        success: false,
+        error: err,
+      });
+    console.log("New user successfully created!!");
+    res.send({
+      id: record._id,
+      success: true,
+      error: false,
+    });
+  });
+});
 
-module.exports = route
+module.exports = route;

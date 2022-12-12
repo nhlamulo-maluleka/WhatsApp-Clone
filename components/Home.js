@@ -4,13 +4,27 @@ import Calls from "./Calls";
 import Chats from "./Chats";
 import Status from "./Status";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faCamera, faEllipsisVertical, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faCamera, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import socket from "../socket";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import endPoint from "../endPoint";
+
+import HomePopupMenu from "./HomePopupMenu";
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
+  const [session, _] = useState(route.params.session);
+
+  useEffect(() => {
+    axios
+      .post(`${endPoint}/loadMessages`, {})
+      .then((result) => {})
+      .catch((err) => console.log(err));
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -31,11 +45,7 @@ export default function Home({ navigation }) {
             />
           </TouchableOpacity>
           <TouchableOpacity>
-            <FontAwesomeIcon
-              style={styles.toolIcons}
-              size={21}
-              icon={faEllipsisVertical}
-            />
+            <HomePopupMenu />
           </TouchableOpacity>
         </View>
       </View>
@@ -54,12 +64,12 @@ export default function Home({ navigation }) {
       >
         <Tab.Screen
           style={styles.tab}
-          name="CHATS"
+          name={"CHATS"}
           component={Chats}
           initialParams={{ socket: socket }}
         />
-        <Tab.Screen name="STATUS" component={Status} />
-        <Tab.Screen name="CALLS" component={Calls} />
+        <Tab.Screen name={"STATUS"} component={Status} />
+        <Tab.Screen name={"CALLS"} component={Calls} />
       </Tab.Navigator>
       <StatusBar style={{ backgroundColor: "#1f2c34" }} />
     </SafeAreaView>

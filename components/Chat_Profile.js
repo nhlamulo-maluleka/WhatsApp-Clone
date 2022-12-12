@@ -1,12 +1,12 @@
 import { StyleSheet, View, Text, TouchableOpacity, Image } from "react-native";
 import {
   faArrowLeft,
-  faEllipsisVertical,
   faPhone,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import manifest from "../manifest";
+import ChatPopupMenu from "./ChatPopupMenu";
 
 export default function ChatProfile({ navigation, route }) {
   return (
@@ -33,11 +33,7 @@ export default function ChatProfile({ navigation, route }) {
           <FontAwesomeIcon size={20} style={styles.icons} icon={faPhone} />
         </TouchableOpacity>
         <TouchableOpacity>
-          <FontAwesomeIcon
-            size={20}
-            style={styles.icons}
-            icon={faEllipsisVertical}
-          />
+          <ChatPopupMenu/>
         </TouchableOpacity>
       </View>
     </View>

@@ -29,10 +29,10 @@ export default function ChatMessage({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
       <Image source={manifest.chatbg} style={styles.bgImage} />
-      <ChatProfile navigation={navigation} route={route}/>
+      <ChatProfile navigation={navigation} route={route} />
       <ChatMessages rootId={userId} messageList={messages} />
       <ChatMessageControl rootId={userId} sendMessage={setMyMessage} />
-      <StatusBar/>
+      <StatusBar />
     </SafeAreaView>
   );
 }
