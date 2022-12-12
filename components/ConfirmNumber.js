@@ -5,9 +5,17 @@ import {
   StatusBar,
   TextInput,
   Button,
+  Keyboard,
+  Alert,
 } from "react-native";
+import { useState, useEffect } from "react"
+import axios from "axios"
+import server from "../endPoint"
+// import { getHash, getOtp, addListener, removeListener } from "react-native-otp-verify"
 
-export default function ConfirmNumber() {
+export default function ConfirmNumber({ navigation }) {
+  const [number, setNumber] = useState();
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -22,12 +30,38 @@ export default function ConfirmNumber() {
         <TextInput
           style={styles.numberInput}
           placeholder={"Enter your number..."}
-          placeholderTextColor={"#FFF"}
+          placeholderTextColor={"#8596a1"}
           keyboardType="numeric"
+          onChangeText={newNum => {
+            setNumber(newNum);
+          }}
+          value={number}
         />
       </View>
       <View style={styles.btnContainer}>
-        <Button title="Next" style={styles.btn} />
+        <Button
+          title="Next"
+          color={"green"}
+          onPress={() => {
+            axios.post(`${server}/authPhone`, {
+              phone: number
+            }).then(({ data: { exists } }) => {
+              if (!exists) {
+                navigation.navigate("EditProfile", {
+                  number: number
+                })
+              } else {
+                Alert.alert(
+                  "Confirm Number",
+                  "This number is already registered on WhatsApp",
+                  [{
+                    text: "Okay",
+                    onPress: () => { }
+                  }]
+                )
+              }
+            }).catch(err => { console.log(err) })
+          }} />
       </View>
       <StatusBar />
     </View>
@@ -53,10 +87,14 @@ const styles = StyleSheet.create({
   newNumber: {
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
+    padding: 12,
+    marginTop: 20,
+    marginBottom: 10,
   },
   numText: {
     color: "#8596a1",
+    textAlign: "center",
+    fontSize: 18
   },
   numberContainer: {
     padding: 15,
@@ -64,7 +102,7 @@ const styles = StyleSheet.create({
   numberInput: {
     borderColor: "#FFF",
     borderRadius: 10,
-    borderWidth: 2,
+    borderWidth: 1,
     fontSize: 17,
     padding: 8,
     color: "#fff",
@@ -73,9 +111,5 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: "center",
     justifyContent: "center",
-  },
-  btn: {
-    paddingLeft: 12,
-    backgroundColor: "green",
   },
 });
