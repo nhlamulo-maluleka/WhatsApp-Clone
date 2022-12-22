@@ -5,13 +5,12 @@ import {
   StatusBar,
   TextInput,
   Button,
-  Keyboard,
   Alert,
 } from "react-native";
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import axios from "axios"
 import server from "../endPoint"
-// import { getHash, getOtp, addListener, removeListener } from "react-native-otp-verify"
+import { trimNumber } from "../helperFunctions"
 
 export default function ConfirmNumber({ navigation }) {
   const [number, setNumber] = useState();
@@ -44,11 +43,11 @@ export default function ConfirmNumber({ navigation }) {
           color={"green"}
           onPress={() => {
             axios.post(`${server}/authPhone`, {
-              phone: number
+              phone: trimNumber(number)
             }).then(({ data: { exists } }) => {
               if (!exists) {
                 navigation.navigate("EditProfile", {
-                  number: number
+                  number: trimNumber(number)
                 })
               } else {
                 Alert.alert(

@@ -15,6 +15,9 @@ import {
   faEllipsisVertical,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import serverEndPoint from "../endPoint";
+import { trimNumber } from "../helperFunctions";
 
 export default function StartChat({ navigation, route }) {
   const [contacts, setContacts] = useState([]);
@@ -34,17 +37,27 @@ export default function StartChat({ navigation, route }) {
               const contact = { name: object.firstName };
 
               object.phoneNumbers?.forEach((phone) => {
-                if (contact.name) {
-                  if (!contact.phone) {
-                    contact.phone = phone.number;
-                    contactList = [...contactList, contact];
-                  }
+                if (
+                  contact.name &&
+                  !contact.phone &&
+                  phone?.number.length > 9
+                ) {
+                  contact.phone = trimNumber(phone.number);
+                  contactList = [...contactList, contact];
                 }
               });
             }
           });
         }
-        setContacts(contactList);
+
+        axios
+          .post(`${serverEndPoint}/validatesContacts`, {
+            contacts: contactList,
+          })
+          .then(({ data }) => {
+            setContacts(data);
+          })
+          .catch((err) => console.log(err));
       }
     })();
   }, []);
@@ -91,18 +104,34 @@ export default function StartChat({ navigation, route }) {
       <View style={styles.contentView}>
         {contacts.length > 0 ? (
           <ScrollView style={styles.contactsView}>
-            {contacts.map((object, index) => {
-              return (
-                <ChatUser
-                  name={object.name}
-                  phone={object.phone}
-                  time={false}
-                  navigation={navigation}
-                  socket={route.params.socket}
-                  key={index}
-                />
-              );
-            })}
+            <Text style={styles.contactsHeader}>Contacts on WhatsApp</Text>
+            <View>
+              {contacts.map((object, index) => {
+                return object.isUser ? (
+                  <ChatUser
+                    user={object}
+                    time={false}
+                    navigation={navigation}
+                    socket={route.params.socket}
+                    key={index}
+                  />
+                ) : null;
+              })}
+            </View>
+            <View>
+              <Text style={styles.contactsHeader}>Invite to WhatsApp</Text>
+              {contacts.map((object, index) => {
+                return !object.isUser ? (
+                  <ChatUser
+                    user={object}
+                    time={false}
+                    navigation={navigation}
+                    socket={route.params.socket}
+                    key={index}
+                  />
+                ) : null;
+              })}
+            </View>
           </ScrollView>
         ) : (
           <ActivityIndicator size={"large"} color={"#FFF"} />
@@ -159,5 +188,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  contactsHeader: {
+    textAlign: "left",
+    color: "#06a683",
+    padding: 8,
+    fontSize: 14
   },
 });

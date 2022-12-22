@@ -9,10 +9,33 @@ import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faMessage } from "@fortawesome/free-solid-svg-icons";
 import ChatUser from "./ChatUser";
+import SendSMS from "react-native-sms";
 
 export default function Chats({ route, navigation }) {
   const [contacts, setContacts] = useState([]);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    SendSMS.send(
+      {
+        // Message body
+        body: 'Hi\nI just send you an SMS',
+        // Recipients Number
+        recipients: ['0733859365'],
+        // An array of types
+        // "completed" response when using android
+        successTypes: ["sent", "queued"],
+      },
+      (completed, cancelled, error) => {
+        if (completed) {
+          console.log("SMS Sent Completed");
+        } else if (cancelled) {
+          console.log("SMS Sent Cancelled");
+        } else if (error) {
+          console.log("Some error occured");
+        }
+      }
+    );
+    console.log("What happened!??")
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -21,8 +44,7 @@ export default function Chats({ route, navigation }) {
           {contact.map((object, index) => {
             return (
               <ChatUser
-                name={object.name}
-                phone={object.phone}
+                user={object}
                 time={false}
                 navigation={navigation}
                 socket={route.params.socket}
@@ -43,7 +65,7 @@ export default function Chats({ route, navigation }) {
       <TouchableOpacity
         onPress={() => {
           navigation.navigate("StartChat", {
-            socket: route.params.socket
+            socket: route.params.socket,
           });
         }}
         style={styles.message}

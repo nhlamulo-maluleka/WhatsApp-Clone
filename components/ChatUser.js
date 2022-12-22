@@ -3,7 +3,12 @@ import { Image, StyleSheet, Text, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import manifest from "../manifest";
 
-export default function ChatUser({ name, phone, time, navigation, socket }) {
+export default function ChatUser({
+  user: { name, phone, isUser },
+  time,
+  navigation,
+  socket,
+}) {
   const [pressed, setPressed] = useState(false);
 
   return (
@@ -37,7 +42,9 @@ export default function ChatUser({ name, phone, time, navigation, socket }) {
       </TouchableOpacity>
       <View style={styles.textView}>
         <Text style={styles.userName}>{name}</Text>
-        <Text style={styles.msgPreview}>Recent activity preview</Text>
+        {
+          isUser ? <Text style={styles.msgPreview}>Recent activity preview</Text> : null
+        }
       </View>
       {time ? <Text style={styles.time}>11:20</Text> : null}
     </TouchableOpacity>

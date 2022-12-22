@@ -16,6 +16,19 @@ route.post("/authPhone", async (req, res) => {
   res.send({ exists: exist ? true : false });
 });
 
+route.post("/validatesContacts", async (req, res) => {
+  const {
+    body: { contacts },
+  } = req;
+
+  for (let index in contacts) {
+    const exist = await userSchema.findOne({ number: contacts[index].phone });
+    contacts[index].isUser = exist ? true : false;
+  }
+
+  res.send(contacts);
+});
+
 route.post("/createUser", multer.single("profile"), async (req, res) => {
   const {
     body: { number, name, profile },
